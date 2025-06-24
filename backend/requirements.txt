@@ -1,0 +1,12 @@
+Django==5.0.1
+environs==10.3.0
+marshmallow==3.19.0
+djangorestframework==3.14.0
+Pillow==10.1.0
+drf-spectacular==0.28.0
+djangorestframework_simplejwt==5.4.0
+XlsxWriter==3.2.2
+gunicorn==20.1.0
+psycopg2-binary==2.9.6
+django-cors-headers==4.7.0
+requests==2.32.3
