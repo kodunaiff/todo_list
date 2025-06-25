@@ -116,11 +116,11 @@ USE_I18N = True
 USE_TZ = True
 
 # Настройки Celery
-# CELERY_BROKER_URL = 'redis://redis:6379/0'     # docker vers
-# CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # docker vers
+CELERY_BROKER_URL = 'redis://redis:6379/0'     # docker vers
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # docker vers
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+#  CELERY_BROKER_URL = 'redis://localhost:6379/0'
+#  CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 CELERY_TIMEZONE = 'America/Adak'
 CELERY_ENABLE_UTC = False
@@ -134,6 +134,10 @@ CELERY_BEAT_SCHEDULE = {
     'debug-every-10s': {
         'task': 'tasks.tasks.debug_task',
         'schedule': 10.0,
+    },
+    'check-due-tasks-every-minute': {
+        'task': 'tasks.tasks.check_due_tasks',
+        'schedule': 60.0,  # Каждую минуту
     },
 }
 
