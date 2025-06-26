@@ -13,7 +13,7 @@ services:
     ports:
       - "5433:5432"
     networks:
-      - wishlist_network
+      - todolist_network
 
   redis:
     image: redis:6-alpine
@@ -25,7 +25,7 @@ services:
       timeout: 5s
       retries: 3
     networks:
-      - wishlist_network
+      - todolist_network
 
   backend:
     build: ./backend
@@ -44,7 +44,7 @@ services:
     ports:
       - "8000:8000"
     networks:
-      - wishlist_network
+      - todolist_network
 
   celery-worker:
     build: ./backend
@@ -59,7 +59,7 @@ services:
       - redis
       - backend
     networks:
-      - wishlist_network
+      - todolist_network
     restart: unless-stopped
 
   celery-beat:
@@ -75,12 +75,25 @@ services:
       - redis
       - backend
     networks:
-      - wishlist_network
+      - todolist_network
+    restart: unless-stopped
+
+  bot:
+    build: ./bot_app
+    container_name: todolist_bot
+    volumes:
+      - ./bot_app:/app
+    env_file:
+      - .env
+    depends_on:
+      - backend
+    networks:
+      - todolist_network
     restart: unless-stopped
 
 volumes:
   db_data:
 
 networks:
-  wishlist_network:
+  todolist_network:
     driver: bridge
