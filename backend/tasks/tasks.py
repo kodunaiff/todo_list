@@ -1,15 +1,15 @@
 from celery import shared_task
 from django.utils import timezone
 from .models import Task
+import requests
 import logging
-#from aiogram import Bot
 import os
+from environs import Env
 
+env = Env()
+env.read_env()
 
-@shared_task
-def debug_task():
-    print("Beat is working!")
-    return True
+BOT_TOKEN = env('BOT_TOKEN')
 
 
 @shared_task
@@ -18,10 +18,21 @@ def notify_due_tasks():
     due_tasks = Task.objects.filter(due_date__lte=now, is_completed=False)
     logging.info("pdjgkglf")
 
-
     for task in due_tasks:
         logging.info("pdjgkglf")
-        print(f"⚠️ Напоминание пользователю {task.user_id} о задаче: {task.title}")
+        # print(f"⚠️ Напоминание пользователю {task.user_id} о задаче: {task.tit      le}")
+        send_telegram_notification.delay(
+            chat_id=task.user.telegram_id,
+            text=f"⏰ Задача просрочена: {task.title}"
+        )
+
+
+@shared_task
+def send_telegram_notification(chat_id, text):
+    requests.post(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+        json={'chat_id': chat_id, 'text': text}
+    )
 
 #
 # @shared_task
