@@ -12,6 +12,7 @@ dp = Dispatcher()
 BACKEND_URL = "http://backend:8000/api/users/"
 
 
+
 async def register_user(telegram_id: int, username: str = None) -> bool:
     """Отправляет данные пользователя на бэкенд для регистрации"""
     user_data = {

@@ -126,15 +126,7 @@ CELERY_ENABLE_UTC = False
 CELERY_BEAT_SCHEDULE = {
     'notify_due_tasks-every-minute': {
         'task': 'tasks.tasks.notify_due_tasks',
-        'schedule': 60.0,  # Каждую минуту
-    },
-    'debug-every-10s': {
-        'task': 'tasks.tasks.debug_task',
-        'schedule': 10.0,
-    },
-    'check-due-tasks-every-minute': {
-        'task': 'tasks.tasks.check_due_tasks',
-        'schedule': 60.0,  # Каждую минуту
+        'schedule': 3600.0,  # Каждый час
     },
 }
 

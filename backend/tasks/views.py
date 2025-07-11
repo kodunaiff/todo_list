@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, serializers
 from .models import Task, Category, User
 from .serializers import TaskSerializer, CategorySerializer, UserSerializer
 from rest_framework.response import Response
@@ -37,8 +37,12 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Получаем или создаем пользователя
         telegram_id = self.request.data.get('user')
-        username = self.request.data.get('username')
-        user = UserViewSet().create_or_get_user(telegram_id, username)
+        if not telegram_id:
+            raise serializers.ValidationError("Поле user не передано")
+        user, _ = User.objects.get_or_create(
+            telegram_id=telegram_id,
+            defaults={'username': self.request.data.get('username', '')}
+        )
 
         # Сохраняем задачу с привязкой к пользователю
         serializer.save(user=user)
